@@ -4,5 +4,5 @@ sourceCompatibility = JavaVersion.VERSION_1_7
 targetCompatibility = JavaVersion.VERSION_1_7
 
 dependencies {
-    compileOnly 'androidx.recyclerview:recyclerview:1.0.0'
+    compileOnly 'com.google.android:android:1.6_r2'
 }

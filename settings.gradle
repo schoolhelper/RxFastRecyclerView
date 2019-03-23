@@ -1,1 +1,1 @@
-include ':app', ':rxfastrecyclerview', 'stub-androidx'
+include ':sampleapp', ':rxfastrecyclerview', 'stub-androidx'

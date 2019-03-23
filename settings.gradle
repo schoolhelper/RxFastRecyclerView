@@ -1,0 +1,3 @@
+include ':app', ':rxfastrecyclerview', 'stub-androidx'
+
+project(':stub-androidx').projectDir = new File('rxfastrecyclerview/stub-androidx')

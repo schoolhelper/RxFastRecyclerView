@@ -11,7 +11,6 @@ sealed class UpdateEntityCommand<E : Any>
 	* [entity] - item for insert
 	*/
 data class InsertEntity<E : Any>(val position: Int, val entity: E) : UpdateEntityCommand<E>()
-
 data class RemoveEntity<E : Any>(val position: Int, val entity: E) : UpdateEntityCommand<E>()
 data class ChangeEntity<E : Any>(val position: Int, val entity: E) : UpdateEntityCommand<E>()
 data class MoveEntity<E : Any>(val fromPosition: Int, val toPosition: Int) : UpdateEntityCommand<E>()

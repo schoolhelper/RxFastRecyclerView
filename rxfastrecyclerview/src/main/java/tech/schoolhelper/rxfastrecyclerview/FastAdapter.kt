@@ -42,7 +42,6 @@ abstract class FastAdapter<ENTITY : Any, ViewHolder : FastUpdateViewHolder<ENTIT
 		super.onViewRecycled(holder)
 		holder.onRecycle()
 	}
-	
 }
 
 abstract class FastUpdateViewHolder<ENTITY : Any>(itemView: View) : RecyclerView.ViewHolder(itemView) {

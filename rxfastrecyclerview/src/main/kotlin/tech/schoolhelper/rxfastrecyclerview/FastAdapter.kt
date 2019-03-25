@@ -2,38 +2,21 @@ package tech.schoolhelper.rxfastrecyclerview
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
+import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.subjects.PublishSubject
 
 abstract class FastAdapter<ENTITY : Any, ViewHolder : FastUpdateViewHolder<ENTITY>> : RecyclerView.Adapter<ViewHolder>() {
 	
-	protected val items: ArrayList<ENTITY> = ArrayList()
+	private val controller = FastAdapterController<ENTITY>(::notifyDataSetChanged, ::notifyItemRemoved, ::notifyItemInserted, ::notifyItemMoved)
 	
-	private val changeEntitiesPublisher: PublishSubject<ChangeEntity<ENTITY>> = PublishSubject.create<ChangeEntity<ENTITY>>()
+	protected val items = controller.items
 	
 	fun updateContent(commands: ListAction<ENTITY>) {
-		items.clear()
-		items.addAll(commands.data)
-		
-		when (commands) {
-			is InitListAction -> {
-				notifyDataSetChanged()
-			}
-			is UpdateListAction -> {
-				commands.changes.forEach { command ->
-					when (command) {
-						is InsertEntity -> notifyItemInserted(command.position)
-						is RemoveEntity -> notifyItemRemoved(command.position)
-						is ChangeEntity -> changeEntitiesPublisher.onNext(command)
-						is MoveEntity -> notifyItemMoved(command.fromPosition, command.toPosition)
-					}
-				}
-			}
-		}
+		controller.updateContent(commands)
 	}
 	
 	override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-		holder.bind(items[position], changeEntitiesPublisher)
+		holder.bind(items[position], controller.changeEntitiesPublisher)
 	}
 	
 	override fun getItemCount(): Int = items.size
@@ -50,11 +33,11 @@ abstract class FastUpdateViewHolder<ENTITY : Any>(itemView: View) : RecyclerView
 	
 	abstract fun initEntity(entity: ENTITY)
 	
-	abstract fun setupListeners()
+	abstract fun setupListeners(entity: ENTITY)
 	
-	fun bind(entity: ENTITY, changeEntitySubject: PublishSubject<ChangeEntity<ENTITY>>) {
+	fun bind(entity: ENTITY, changeEntitySubject: Observable<ChangeEntity<ENTITY>>) {
 		initEntity(entity)
-		setupListeners()
+		setupListeners(entity)
 		
 		compositeDisposable.add(changeEntitySubject
 				.filter { it.position == adapterPosition }

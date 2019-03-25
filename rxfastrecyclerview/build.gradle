@@ -51,7 +51,7 @@ dependencies {
     testImplementation "org.junit.jupiter:junit-jupiter-params:$jupiterVersion"
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$jupiterVersion"*/
 
-    testImplementation 'io.kotlintest:kotlintest-runner-junit5:3.2.1'
+    testImplementation 'io.kotlintest:kotlintest-runner-junit5:3.3.1'
 
     testImplementation "androidx.recyclerview:recyclerview:1.0.0"
     testImplementation "io.reactivex.rxjava2:rxjava:2.2.7"

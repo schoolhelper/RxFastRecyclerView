@@ -42,7 +42,7 @@ dependencies {
 
     testImplementation 'junit:junit:4.12'
 
-    def mockKVersion = "1.9.1.kotlin12"
+    def mockKVersion = "1.9.3"
     testImplementation "io.mockk:mockk:$mockKVersion"
     testImplementation "io.mockk:mockk-android:$mockKVersion"
 

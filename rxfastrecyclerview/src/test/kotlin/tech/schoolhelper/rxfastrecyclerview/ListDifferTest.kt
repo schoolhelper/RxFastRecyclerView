@@ -4,11 +4,6 @@ import io.reactivex.Observable
 import io.reactivex.observers.TestObserver
 import org.junit.Test
 
-private data class TestEntity(
-		val id: Int,
-		val content: String
-)
-
 class ListDifferTest {
 	
 	private val differ: ListDiffer<TestEntity> = object : ListDiffer<TestEntity>() {
@@ -30,7 +25,7 @@ class ListDifferTest {
 	private val update2 = TestEntity(2, "content4")
 	
 	@Test
-	fun `test data for insert two entities together`() {
+	fun `test insert two entities together`() {
 		val input = listOf(
 				listOf(entity1, entity2),
 				listOf(entity1, entity2, insertData1, insertData2)
@@ -44,7 +39,7 @@ class ListDifferTest {
 	}
 	
 	@Test
-	fun `test data for change two entities one by one`() {
+	fun `test change two entities one by one`() {
 		val input = listOf(
 				listOf(entity1, entity2),
 				listOf(entity1, update2),
@@ -61,7 +56,7 @@ class ListDifferTest {
 	}
 	
 	@Test
-	fun `test data for change two entities together`() {
+	fun `test change two entities together`() {
 		val input = listOf(
 				listOf(entity1, entity2),
 				listOf(update1, update2)
@@ -75,7 +70,7 @@ class ListDifferTest {
 	}
 	
 	@Test
-	fun `test data for change one entity`() {
+	fun `test change one entity`() {
 		val input = listOf(
 				listOf(entity1, entity2, entity3),
 				listOf(entity1, update2, entity3)
@@ -90,7 +85,7 @@ class ListDifferTest {
 	}
 	
 	@Test
-	fun `test data for remove one entity`() {
+	fun `test remove one entity`() {
 		val input = listOf(
 				listOf(entity1, entity2),
 				listOf(entity2)
@@ -106,7 +101,7 @@ class ListDifferTest {
 	}
 	
 	@Test
-	fun `test data for remove medium entity`() {
+	fun `test remove medium entity`() {
 		val input = listOf(
 				listOf(entity1, entity2, entity3),
 				listOf(entity1, entity3)
@@ -121,7 +116,7 @@ class ListDifferTest {
 	}
 	
 	@Test
-	fun `test data for remove two entity together`() {
+	fun `test remove two entity together`() {
 		val input = listOf(
 				listOf(entity1, entity2, entity3),
 				listOf(entity3)
@@ -137,11 +132,12 @@ class ListDifferTest {
 	}
 	
 	@Test
-	fun `test data for remove all entities`() {
+	fun `test remove all entities`() {
 		val input = listOf(
 				listOf(entity1, entity2, entity3),
 				listOf()
 		)
+		
 		val expected = listOf<ListAction<TestEntity>>(
 				InitListAction(emptyList()),
 				UpdateListAction(listOf(entity1, entity2, entity3), listOf(InsertEntity(0, entity1), InsertEntity(1, entity2), InsertEntity(2, entity3))),
@@ -152,7 +148,7 @@ class ListDifferTest {
 	}
 	
 	@Test
-	fun `test data for insert two entities one by one`() {
+	fun `test insert two entities one by one`() {
 		val input = listOf(
 				listOf(entity1, entity2),
 				listOf(entity1, entity2, insertData1),

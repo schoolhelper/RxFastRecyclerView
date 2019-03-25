@@ -2,6 +2,7 @@ package androidx.recyclerview.widget;
 
 
 import android.view.View;
+import android.view.ViewGroup;
 
 public class RecyclerView {
 
@@ -19,6 +20,8 @@ public class RecyclerView {
 
     public abstract static class Adapter<VH extends ViewHolder> {
         public abstract void onBindViewHolder(VH holder, int position);
+
+        public abstract VH onCreateViewHolder(ViewGroup p0, int p1);
 
         public abstract int getItemCount();
 

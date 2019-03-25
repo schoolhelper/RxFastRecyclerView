@@ -20,4 +20,4 @@ before_install:
 
 # Run assemble and unit tests
 script:
-- ./gradlew clean testDebugUnitTest dokka
+- ./gradlew clean testDebugUnitTest

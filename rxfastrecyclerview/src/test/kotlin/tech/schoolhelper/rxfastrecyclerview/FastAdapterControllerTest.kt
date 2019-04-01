@@ -103,6 +103,4 @@ class FastAdapterControllerTest {
 		
 		controller.items shouldBe mockList
 	}
-	
-	
 }

@@ -23,6 +23,7 @@ class ListDifferTest {
 	private val insertData2 = TestEntity(4, "content4")
 	private val update1 = TestEntity(1, "content3")
 	private val update2 = TestEntity(2, "content4")
+	private val update3 = TestEntity(31, "update31")
 	
 	@Test
 	fun `test insert two entities together`() {
@@ -164,6 +165,51 @@ class ListDifferTest {
 		checkIsTransformCorrect(input, expected)
 	}
 	
+	@Test
+	fun `test move`() {
+		val input = listOf(
+				listOf(entity1, entity2),
+				listOf(entity2, entity1)
+		)
+		val expected = listOf<ListAction<TestEntity>>(
+				InitListAction(emptyList()),
+				UpdateListAction(listOf(entity1, entity2), listOf(InsertEntity(0, entity1), InsertEntity(1, entity2))),
+				UpdateListAction(listOf(entity2, entity1), listOf(MoveEntity(0, 1)))
+		)
+		
+		checkIsTransformCorrect(input, expected)
+	}
+	
+	@Test
+	fun `test insert and remove`() {
+		val input = listOf(
+				listOf(entity1, entity2),
+				listOf(entity1, entity3)
+		)
+		val expected = listOf<ListAction<TestEntity>>(
+				InitListAction(emptyList()),
+				UpdateListAction(listOf(entity1, entity2), listOf(InsertEntity(0, entity1), InsertEntity(1, entity2))),
+				UpdateListAction(listOf(entity1, entity3), listOf(RemoveEntity(1, entity2), InsertEntity(1, entity3)))
+		)
+		
+		checkIsTransformCorrect(input, expected)
+	}
+	
+	@Test
+	fun `test remove and update`() {
+		val input = listOf(
+				listOf(entity1, entity2, entity3),
+				listOf(entity1, update3)
+		)
+		val expected = listOf<ListAction<TestEntity>>(
+				InitListAction(emptyList()),
+				UpdateListAction(listOf(entity1, entity2, entity3), listOf(InsertEntity(0, entity1), InsertEntity(1, entity2), InsertEntity(2, entity3))),
+				UpdateListAction(listOf(entity1, update3), listOf(RemoveEntity(1, entity2), ChangeEntity(2, update3)))
+		)
+		
+		checkIsTransformCorrect(input, expected)
+	}
+	
 	private fun checkIsTransformCorrect(input: List<List<TestEntity>>, expected: List<ListAction<TestEntity>>) {
 		val inputObservable = Observable.fromIterable(input)
 		val testObservable = TestObserver<ListAction<TestEntity>>()
@@ -173,5 +219,6 @@ class ListDifferTest {
 				.subscribe(testObservable)
 		
 		testObservable.assertValues(*expected.toTypedArray())
+		testObservable.dispose()
 	}
 }

@@ -53,7 +53,7 @@ abstract class ListDiffer<E : Any> {
 			observable.scan(InitListAction(emptyList())) { old: ListAction<E>, newList: List<E> ->
 				val updateActions = mutableListOf<UpdateEntityCommand<E>>()
 				
-				DiffUtil.calculateDiff(DiffCallback(old.data, newList, ::areItemTheSame, ::areContentTheSame), false)
+				DiffUtil.calculateDiff(DiffCallback(old.data, newList, ::areItemTheSame, ::areContentTheSame), true)
 						.dispatchUpdatesTo(object : ListUpdateCallback {
 							override fun onChanged(position: Int, count: Int, payload: Any?) {
 								updateActions.addAll((position until (position + count)).map { ChangeEntity(it, newList[it]) })

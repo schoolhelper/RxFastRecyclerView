@@ -36,6 +36,7 @@ abstract class FastUpdateViewHolder<ENTITY : Any>(itemView: View) : RecyclerView
 	abstract fun setupListeners(entity: ENTITY)
 	
 	fun bind(entity: ENTITY, changeEntitySubject: Observable<ChangeEntity<ENTITY>>) {
+		onRecycle()
 		initEntity(entity)
 		setupListeners(entity)
 		

@@ -11,8 +11,15 @@ sealed class UpdateEntityCommand<E : Any>
 	* [entity] - item for insert
 	*/
 data class InsertEntity<E : Any>(val position: Int, val entity: E) : UpdateEntityCommand<E>()
+
+data class InsertRange<E : Any>(val from: Int, val to: Int, val entities: List<E>) : UpdateEntityCommand<E>()
+
 data class RemoveEntity<E : Any>(val position: Int, val entity: E) : UpdateEntityCommand<E>()
+data class RemoveRange<E : Any>(val from: Int, val to: Int, val entities: List<E>) : UpdateEntityCommand<E>()
+
 data class ChangeEntity<E : Any>(val position: Int, val entity: E) : UpdateEntityCommand<E>()
+data class ChangeRange<E : Any>(val from: Int, val to: Int, val entities: List<E>) : UpdateEntityCommand<E>()
+
 data class MoveEntity<E : Any>(val fromPosition: Int, val toPosition: Int) : UpdateEntityCommand<E>()
 
 sealed class ListAction<E : Any>(open val data: List<E>)

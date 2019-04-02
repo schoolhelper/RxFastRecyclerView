@@ -2,6 +2,7 @@ package tech.schoolhelper.rxfastrecyclerview
 
 import io.reactivex.Observable
 import io.reactivex.observers.TestObserver
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class ListDifferTest {
@@ -31,11 +32,29 @@ class ListDifferTest {
 				listOf(entity1, entity2),
 				listOf(entity1, entity2, insertData1, insertData2)
 		)
+		
 		val expected = listOf<ListAction<TestEntity>>(
 				InitListAction(emptyList()),
-				UpdateListAction(listOf(entity1, entity2), listOf(InsertEntity(0, entity1), InsertEntity(1, entity2))),
-				UpdateListAction(listOf(entity1, entity2, insertData1, insertData2), listOf(InsertEntity(2, insertData1), InsertEntity(3, insertData2)))
+				UpdateListAction(listOf(entity1, entity2), listOf(InsertRange(0, 1, listOf(entity1, entity2)))),
+				UpdateListAction(listOf(entity1, entity2, insertData1, insertData2), listOf(InsertRange(2, 3, listOf(insertData1, insertData2))))
 		)
+		
+		checkIsTransformCorrect(input, expected)
+	}
+	
+	@Test
+	fun `test insert one entities together`() {
+		val input = listOf(
+				listOf(entity1, entity2),
+				listOf(entity1, entity2, insertData1)
+		)
+		
+		val expected = listOf<ListAction<TestEntity>>(
+				InitListAction(emptyList()),
+				UpdateListAction(listOf(entity1, entity2), listOf(InsertRange(0, 1, listOf(entity1, entity2)))),
+				UpdateListAction(listOf(entity1, entity2, insertData1), listOf(InsertEntity(2, insertData1)))
+		)
+		
 		checkIsTransformCorrect(input, expected)
 	}
 	
@@ -49,10 +68,11 @@ class ListDifferTest {
 		
 		val expected = listOf<ListAction<TestEntity>>(
 				InitListAction(emptyList()),
-				UpdateListAction(listOf(entity1, entity2), listOf(InsertEntity(0, entity1), InsertEntity(1, entity2))),
+				UpdateListAction(listOf(entity1, entity2), listOf(InsertRange(0, 1, listOf(entity1, entity2)))),
 				UpdateListAction(listOf(entity1, update2), listOf(ChangeEntity(1, update2))),
 				UpdateListAction(listOf(update1, update2), listOf(ChangeEntity(0, update1)))
 		)
+		
 		checkIsTransformCorrect(input, expected)
 	}
 	
@@ -64,7 +84,7 @@ class ListDifferTest {
 		)
 		val expected = listOf<ListAction<TestEntity>>(
 				InitListAction(emptyList()),
-				UpdateListAction(listOf(entity1, entity2), listOf(InsertEntity(0, entity1), InsertEntity(1, entity2))),
+				UpdateListAction(listOf(entity1, entity2), listOf(InsertRange(0, 1, listOf(entity1, entity2)))),
 				UpdateListAction(listOf(update1, update2), listOf(ChangeEntity(0, update1), ChangeEntity(1, update2)))
 		)
 		checkIsTransformCorrect(input, expected)
@@ -78,7 +98,7 @@ class ListDifferTest {
 		)
 		val expected = listOf<ListAction<TestEntity>>(
 				InitListAction(emptyList()),
-				UpdateListAction(listOf(entity1, entity2, entity3), listOf(InsertEntity(0, entity1), InsertEntity(1, entity2), InsertEntity(2, entity3))),
+				UpdateListAction(listOf(entity1, entity2, entity3), listOf(InsertRange(0, 2, listOf(entity1, entity2, entity3)))),
 				UpdateListAction(listOf(entity1, update2, entity3), listOf(ChangeEntity(1, update2)))
 		)
 		
@@ -94,7 +114,7 @@ class ListDifferTest {
 		
 		val expected = listOf<ListAction<TestEntity>>(
 				InitListAction(emptyList()),
-				UpdateListAction(listOf(entity1, entity2), listOf(InsertEntity(0, entity1), InsertEntity(1, entity2))),
+				UpdateListAction(listOf(entity1, entity2), listOf(InsertRange(0, 1, listOf(entity1, entity2)))),
 				UpdateListAction(listOf(entity2), listOf(RemoveEntity(0, entity1)))
 		)
 		
@@ -109,7 +129,7 @@ class ListDifferTest {
 		)
 		val expected = listOf<ListAction<TestEntity>>(
 				InitListAction(emptyList()),
-				UpdateListAction(listOf(entity1, entity2, entity3), listOf(InsertEntity(0, entity1), InsertEntity(1, entity2), InsertEntity(2, entity3))),
+				UpdateListAction(listOf(entity1, entity2, entity3), listOf(InsertRange(0, 2, listOf(entity1, entity2, entity3)))),
 				UpdateListAction(listOf(entity1, entity3), listOf(RemoveEntity(1, entity2)))
 		)
 		
@@ -125,8 +145,8 @@ class ListDifferTest {
 		
 		val expected = listOf<ListAction<TestEntity>>(
 				InitListAction(emptyList()),
-				UpdateListAction(listOf(entity1, entity2, entity3), listOf(InsertEntity(0, entity1), InsertEntity(1, entity2), InsertEntity(2, entity3))),
-				UpdateListAction(listOf(entity3), listOf(RemoveEntity(0, entity1), RemoveEntity(1, entity2)))
+				UpdateListAction(listOf(entity1, entity2, entity3), listOf(InsertRange(0, 2, listOf(entity1, entity2, entity3)))),
+				UpdateListAction(listOf(entity3), listOf(RemoveRange(0, 1, listOf(entity1, entity2))))
 		)
 		
 		checkIsTransformCorrect(input, expected)
@@ -141,8 +161,8 @@ class ListDifferTest {
 		
 		val expected = listOf<ListAction<TestEntity>>(
 				InitListAction(emptyList()),
-				UpdateListAction(listOf(entity1, entity2, entity3), listOf(InsertEntity(0, entity1), InsertEntity(1, entity2), InsertEntity(2, entity3))),
-				UpdateListAction(listOf(), listOf(RemoveEntity(0, entity1), RemoveEntity(1, entity2), RemoveEntity(2, entity3)))
+				UpdateListAction(listOf(entity1, entity2, entity3), listOf(InsertRange(0, 2, listOf(entity1, entity2, entity3)))),
+				UpdateListAction(listOf(), listOf(RemoveRange(0, 2, listOf(entity1, entity2, entity3))))
 		)
 		
 		checkIsTransformCorrect(input, expected)
@@ -157,7 +177,7 @@ class ListDifferTest {
 		)
 		val expected = listOf<ListAction<TestEntity>>(
 				InitListAction(emptyList()),
-				UpdateListAction(listOf(entity1, entity2), listOf(InsertEntity(0, entity1), InsertEntity(1, entity2))),
+				UpdateListAction(listOf(entity1, entity2), listOf(InsertRange(0, 1, listOf(entity1, entity2)))),
 				UpdateListAction(listOf(entity1, entity2, insertData1), listOf(InsertEntity(2, insertData1))),
 				UpdateListAction(listOf(entity1, entity2, insertData1, insertData2), listOf(InsertEntity(3, insertData2)))
 		)
@@ -173,7 +193,7 @@ class ListDifferTest {
 		)
 		val expected = listOf<ListAction<TestEntity>>(
 				InitListAction(emptyList()),
-				UpdateListAction(listOf(entity1, entity2), listOf(InsertEntity(0, entity1), InsertEntity(1, entity2))),
+				UpdateListAction(listOf(entity1, entity2), listOf(InsertRange(0, 1, listOf(entity1, entity2)))),
 				UpdateListAction(listOf(entity2, entity1), listOf(MoveEntity(0, 1)))
 		)
 		
@@ -188,7 +208,7 @@ class ListDifferTest {
 		)
 		val expected = listOf<ListAction<TestEntity>>(
 				InitListAction(emptyList()),
-				UpdateListAction(listOf(entity1, entity2), listOf(InsertEntity(0, entity1), InsertEntity(1, entity2))),
+				UpdateListAction(listOf(entity1, entity2), listOf(InsertRange(0, 1, listOf(entity1, entity2)))),
 				UpdateListAction(listOf(entity1, entity3), listOf(RemoveEntity(1, entity2), InsertEntity(1, entity3)))
 		)
 		
@@ -203,8 +223,26 @@ class ListDifferTest {
 		)
 		val expected = listOf<ListAction<TestEntity>>(
 				InitListAction(emptyList()),
-				UpdateListAction(listOf(entity1, entity2, entity3), listOf(InsertEntity(0, entity1), InsertEntity(1, entity2), InsertEntity(2, entity3))),
-				UpdateListAction(listOf(entity1, update3), listOf(RemoveEntity(1, entity2), ChangeEntity(2, update3)))
+				UpdateListAction(listOf(entity1, entity2, entity3), listOf(InsertRange(0, 2, listOf(entity1, entity2, entity3)))),
+				UpdateListAction(listOf(entity1, update3), listOf(RemoveEntity(1, entity2), ChangeEntity(1, update3)))
+		)
+		
+		checkIsTransformCorrect(input, expected)
+	}
+	
+	@Test
+	fun `test init list one by one`() {
+		val input = listOf(
+				listOf(entity1),
+				listOf(entity1, entity2),
+				listOf(entity1, entity2, entity3)
+		)
+		
+		val expected = listOf<ListAction<TestEntity>>(
+				InitListAction(emptyList()),
+				UpdateListAction(listOf(entity1), listOf(InsertEntity(0, entity1))),
+				UpdateListAction(listOf(entity1, entity2), listOf(InsertEntity(1, entity2))),
+				UpdateListAction(listOf(entity1, entity2, entity3), listOf(InsertEntity(2, entity3)))
 		)
 		
 		checkIsTransformCorrect(input, expected)
@@ -218,7 +256,8 @@ class ListDifferTest {
 				.compose(differ.transformToDiff())
 				.subscribe(testObservable)
 		
-		testObservable.assertValues(*expected.toTypedArray())
-		testObservable.dispose()
+		val actual = testObservable.values()
+		
+		assertTrue(actual.size == actual.size && actual.containsAll(expected) && expected.containsAll(actual))
 	}
 }

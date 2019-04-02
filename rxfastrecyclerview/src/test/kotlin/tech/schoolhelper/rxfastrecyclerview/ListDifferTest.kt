@@ -2,7 +2,6 @@ package tech.schoolhelper.rxfastrecyclerview
 
 import io.reactivex.Observable
 import io.reactivex.observers.TestObserver
-import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class ListDifferTest {
@@ -248,6 +247,24 @@ class ListDifferTest {
 		checkIsTransformCorrect(input, expected)
 	}
 	
+	@Test
+	fun `test add entity one by one with changes`() {
+		val input = listOf(
+				listOf(entity1),
+				listOf(entity1, entity2),
+				listOf(entity1, update2, entity3)
+		)
+		
+		val expected = listOf<ListAction<TestEntity>>(
+				InitListAction(emptyList()),
+				UpdateListAction(listOf(entity1), listOf(InsertEntity(0, entity1))),
+				UpdateListAction(listOf(entity1, entity2), listOf(InsertEntity(1, entity2))),
+				UpdateListAction(listOf(entity1, update2, entity3), listOf(InsertEntity(2, entity3), ChangeEntity(1, update2)))
+		)
+		
+		checkIsTransformCorrect(input, expected)
+	}
+	
 	private fun checkIsTransformCorrect(input: List<List<TestEntity>>, expected: List<ListAction<TestEntity>>) {
 		val inputObservable = Observable.fromIterable(input)
 		val testObservable = TestObserver<ListAction<TestEntity>>()
@@ -256,8 +273,6 @@ class ListDifferTest {
 				.compose(differ.transformToDiff())
 				.subscribe(testObservable)
 		
-		val actual = testObservable.values()
-		
-		assertTrue(actual.size == actual.size && actual.containsAll(expected) && expected.containsAll(actual))
+		testObservable.assertValues(*expected.toTypedArray())
 	}
 }

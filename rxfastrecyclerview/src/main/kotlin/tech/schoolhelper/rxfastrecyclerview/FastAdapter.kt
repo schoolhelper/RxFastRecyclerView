@@ -16,7 +16,7 @@ abstract class FastAdapter<ENTITY : Any, ViewHolder : FastUpdateViewHolder<ENTIT
 	}
 	
 	override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-		holder.bind(items[position], controller.changeEntitiesPublisher)
+		holder.bind(items[position], controller.getChangeEntitiesPublisher())
 	}
 	
 	override fun getItemCount(): Int = items.size

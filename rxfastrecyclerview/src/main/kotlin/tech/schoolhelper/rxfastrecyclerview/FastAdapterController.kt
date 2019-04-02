@@ -1,5 +1,6 @@
 package tech.schoolhelper.rxfastrecyclerview
 
+import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 
 class FastAdapterController<ENTITY : Any>(
@@ -10,7 +11,11 @@ class FastAdapterController<ENTITY : Any>(
 	
 	val items: ArrayList<ENTITY> = ArrayList()
 	
-	val changeEntitiesPublisher: PublishSubject<ChangeEntity<ENTITY>> = PublishSubject.create<ChangeEntity<ENTITY>>()
+	private val changeEntitiesPublisher: PublishSubject<ChangeEntity<ENTITY>> = PublishSubject.create<ChangeEntity<ENTITY>>()
+	
+	fun getChangeEntitiesPublisher(): Observable<ChangeEntity<ENTITY>> {
+		return changeEntitiesPublisher
+	}
 	
 	fun updateContent(commands: ListAction<ENTITY>) {
 		items.clear()

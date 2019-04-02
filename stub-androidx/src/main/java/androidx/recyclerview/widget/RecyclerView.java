@@ -37,7 +37,15 @@ public class RecyclerView {
             throw new RuntimeException("Stub!");
         }
 
+        public final void notifyItemRangeInserted(int positionStart, int itemCount) {
+            throw new RuntimeException("Stub!");
+        }
+
         public final void notifyItemRemoved(int position) {
+            throw new RuntimeException("Stub!");
+        }
+
+        public final void notifyItemRangeRemoved(int positionStart, int itemCount) {
             throw new RuntimeException("Stub!");
         }
 

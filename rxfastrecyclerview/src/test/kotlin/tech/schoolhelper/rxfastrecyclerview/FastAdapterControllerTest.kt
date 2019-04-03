@@ -11,6 +11,7 @@ class FastAdapterControllerTest {
 	
 	private val notifyDataSetChanged: () -> Unit = mockk(relaxed = true)
 	private val notifyItemRemoved: (Int) -> Unit = mockk(relaxed = true)
+	private val notifyItemRemovedRange: (Int, Int) -> Unit = mockk(relaxed = true)
 	private val notifyItemInserted: (Int) -> Unit = mockk(relaxed = true)
 	private val notifyItemInsertedRange: (Int, Int) -> Unit = mockk(relaxed = true)
 	private val notifyItemMoved: (Int, Int) -> Unit = mockk(relaxed = true)
@@ -19,7 +20,7 @@ class FastAdapterControllerTest {
 	
 	@Before
 	fun setUp() {
-		controller = FastAdapterController(notifyDataSetChanged, notifyItemRemoved, notifyItemInserted, notifyItemMoved)
+		controller = FastAdapterController(notifyDataSetChanged, notifyItemMoved, notifyItemRemoved, notifyItemRemovedRange, notifyItemInserted, notifyItemInsertedRange)
 	}
 	
 	@Test
@@ -40,6 +41,22 @@ class FastAdapterControllerTest {
 	
 	@Test
 	fun `test insert one`() {
+		val mockList = makeListOfMocks(10)
+		
+		val command = UpdateListAction(mockList, listOf(InsertEntity(5, mockList[5])))
+		controller.updateContent(command)
+		
+		verify {
+			notifyItemInserted.invoke(5)
+		}
+		
+		verifyNoCallNotify(excludeNotifyItemInsert = true)
+		
+		controller.items shouldBe mockList
+	}
+	
+	@Test
+	fun `test insert two`() {
 		val mockList = makeListOfMocks(2)
 		
 		val command = UpdateListAction(mockList, listOf(InsertEntity(0, mockList[0]), InsertEntity(1, mockList[1])))
@@ -116,7 +133,7 @@ class FastAdapterControllerTest {
 	fun `test update range into middle of list`() {
 		val mockList = makeListOfMocks(6)
 		
-		val command = UpdateListAction(mockList, listOf(ChangeRange(2, 3, listOf(mockList[2], mockList[3]))))
+		val command = UpdateListAction(mockList, listOf(ChangeRange(2, 2, listOf(mockList[2], mockList[3]))))
 		
 		val testObserver = TestObserver<ChangeEntity<TestEntity>>()
 		
@@ -132,16 +149,78 @@ class FastAdapterControllerTest {
 		controller.items shouldBe mockList
 	}
 	
+	@Test
+	fun `test remove one entity`() {
+		val mockList = makeListOfMocks(4)
+		
+		val command = UpdateListAction(mockList, listOf(RemoveEntity(2, mockList[2])))
+		controller.updateContent(command)
+		
+		verify {
+			notifyItemRemoved.invoke(2)
+		}
+		
+		verifyNoCallNotify(excludeNotifyItemRemoved = true)
+		controller.items shouldBe mockList
+	}
+	
+	@Test
+	fun `test remove two entity`() {
+		val mockList = makeListOfMocks(10)
+		
+		val command = UpdateListAction(mockList, listOf(RemoveEntity(2, mockList[2]), RemoveEntity(5, mockList[5])))
+		controller.updateContent(command)
+		
+		verify {
+			notifyItemRemoved.invoke(2)
+			notifyItemRemoved.invoke(5)
+		}
+		
+		verifyNoCallNotify(excludeNotifyItemRemoved = true)
+		controller.items shouldBe mockList
+	}
+	
+	@Test
+	fun `test remove range`() {
+		val mockList = makeListOfMocks(10)
+		
+		val command = UpdateListAction(mockList, listOf(RemoveRange(2, 2, listOf(mockList[2], mockList[3], mockList[4]))))
+		controller.updateContent(command)
+		
+		verify {
+			notifyItemRemovedRange(2, 2)
+		}
+		
+		verifyNoCallNotify(excludeNotifyItemRemovedRange = true)
+		controller.items shouldBe mockList
+	}
+	
+	@Test
+	fun `test move two entities`() {
+		val mockList = makeListOfMocks(10)
+		
+		val command = UpdateListAction(mockList, listOf(MoveEntity(2, 4)))
+		controller.updateContent(command)
+		
+		verify {
+			notifyItemMoved(2, 4)
+		}
+		
+		verifyNoCallNotify(excludeNotifyItemMoved = true)
+		controller.items shouldBe mockList
+	}
+	
 	private fun makeListOfMocks(size: Int): List<TestEntity> {
 		return MutableList(size) { mockk<TestEntity>() }.toList()
 	}
 	
 	private fun verifyNoCallNotify(
-			excludeNotifyItemInsert: Boolean = false,
 			excludeNotifyDataSetChanged: Boolean = false,
+			excludeNotifyItemInsert: Boolean = false,
+			excludeNotifyItemInsertedRange: Boolean = false,
 			excludeNotifyItemRemoved: Boolean = false,
-			excludeNotifyItemMoved: Boolean = false,
-			excludeNotifyItemInsertedRange: Boolean = false
+			excludeNotifyItemRemovedRange: Boolean = false,
+			excludeNotifyItemMoved: Boolean = false
 	) {
 		if (!excludeNotifyItemInsert) {
 			verify(exactly = 0) {
@@ -169,6 +248,11 @@ class FastAdapterControllerTest {
 		if (!excludeNotifyItemInsertedRange) {
 			verify(exactly = 0) {
 				notifyItemInsertedRange.invoke(any(), any())
+			}
+		}
+		if (!excludeNotifyItemRemovedRange) {
+			verify(exactly = 0) {
+				notifyItemRemovedRange.invoke(any(), any())
 			}
 		}
 		

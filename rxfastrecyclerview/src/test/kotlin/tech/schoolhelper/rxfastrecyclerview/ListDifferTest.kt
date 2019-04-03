@@ -2,8 +2,10 @@ package tech.schoolhelper.rxfastrecyclerview
 
 import io.reactivex.Observable
 import io.reactivex.observers.TestObserver
+import org.junit.Ignore
 import org.junit.Test
 
+@Ignore
 class ListDifferTest {
 	
 	private val differ: ListDiffer<TestEntity> = object : ListDiffer<TestEntity>() {

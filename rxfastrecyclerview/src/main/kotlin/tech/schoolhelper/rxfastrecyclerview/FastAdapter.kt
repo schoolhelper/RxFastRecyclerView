@@ -7,7 +7,11 @@ import io.reactivex.disposables.CompositeDisposable
 
 abstract class FastAdapter<ENTITY : Any, ViewHolder : FastUpdateViewHolder<ENTITY>> : RecyclerView.Adapter<ViewHolder>() {
 	
-	private val controller = FastAdapterController<ENTITY>(::notifyDataSetChanged, ::notifyItemRemoved, ::notifyItemInserted, ::notifyItemMoved)
+	private val controller = FastAdapterController<ENTITY>(
+			::notifyDataSetChanged,
+			::notifyItemMoved,
+			::notifyItemRemoved, ::notifyItemRangeRemoved,
+			::notifyItemInserted, ::notifyItemRangeInserted)
 	
 	protected val items = controller.items
 	

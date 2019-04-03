@@ -5,9 +5,11 @@ import io.reactivex.subjects.PublishSubject
 
 class FastAdapterController<ENTITY : Any>(
 		private val notifyDataSetChanged: () -> Unit,
+		private val notifyItemMoved: (Int, Int) -> Unit,
 		private val notifyItemRemoved: (Int) -> Unit,
+		private val notifyItemRemovedRange: (Int, Int) -> Unit,
 		private val notifyItemInserted: (Int) -> Unit,
-		private val notifyItemMoved: (Int, Int) -> Unit) {
+		private val notifyItemInsertedRange: (Int, Int) -> Unit) {
 	
 	val items: ArrayList<ENTITY> = ArrayList()
 	
@@ -29,8 +31,13 @@ class FastAdapterController<ENTITY : Any>(
 				commands.changes.forEach { command ->
 					when (command) {
 						is InsertEntity -> notifyItemInserted(command.position)
+						is InsertRange -> notifyItemInsertedRange(command.from, command.count)
 						is RemoveEntity -> notifyItemRemoved(command.position)
+						is RemoveRange -> notifyItemRemovedRange(command.from, command.count)
 						is ChangeEntity -> changeEntitiesPublisher.onNext(command)
+						is ChangeRange -> {
+							(0 until command.count).map { index -> ChangeEntity(command.from + index, command.entities[index]) }.forEach(changeEntitiesPublisher::onNext)
+						}
 						is MoveEntity -> notifyItemMoved(command.fromPosition, command.toPosition)
 					}
 				}

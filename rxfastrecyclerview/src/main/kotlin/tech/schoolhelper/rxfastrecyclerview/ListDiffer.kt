@@ -63,7 +63,11 @@ abstract class ListDiffer<E : Any> {
 				DiffUtil.calculateDiff(DiffCallback(old.data, newList, ::areItemTheSame, ::areContentTheSame), true)
 						.dispatchUpdatesTo(object : ListUpdateCallback {
 							override fun onChanged(position: Int, count: Int, payload: Any?) {
-								updateActions.addAll((position until (position + count)).map { ChangeEntity(it, newList[it]) })
+								if (count == 1) {
+									updateActions.add(ChangeEntity(position, newList[position]))
+								} else {
+									updateActions.add(ChangeRange(position, count, newList.subList(position, position + count)))
+								}
 							}
 							
 							override fun onMoved(fromPosition: Int, toPosition: Int) {
@@ -71,11 +75,19 @@ abstract class ListDiffer<E : Any> {
 							}
 							
 							override fun onInserted(position: Int, count: Int) {
-								updateActions.addAll((position until (position + count)).map { InsertEntity(it, newList[it]) })
+								if (count == 1) {
+									updateActions.add(InsertEntity(position, newList[position]))
+								} else {
+									updateActions.add(InsertRange(position, count, newList.subList(position, position + count)))
+								}
 							}
 							
 							override fun onRemoved(position: Int, count: Int) {
-								updateActions.addAll((position until (position + count)).map { RemoveEntity(it, old.data[it]) })
+								if (count == 1) {
+									updateActions.add(RemoveEntity(position, old.data[position]))
+								} else {
+									updateActions.add(RemoveRange(position, count, old.data.subList(position, position + count)))
+								}
 							}
 						})
 				return@scan UpdateListAction(newList, updateActions)

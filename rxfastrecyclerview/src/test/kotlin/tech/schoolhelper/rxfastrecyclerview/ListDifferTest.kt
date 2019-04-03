@@ -5,7 +5,6 @@ import io.reactivex.observers.TestObserver
 import org.junit.Ignore
 import org.junit.Test
 
-@Ignore
 class ListDifferTest {
 	
 	private val differ: ListDiffer<TestEntity> = object : ListDiffer<TestEntity>() {
@@ -36,8 +35,8 @@ class ListDifferTest {
 		
 		val expected = listOf<ListAction<TestEntity>>(
 				InitListAction(emptyList()),
-				UpdateListAction(listOf(entity1, entity2), listOf(InsertRange(0, 1, listOf(entity1, entity2)))),
-				UpdateListAction(listOf(entity1, entity2, insertData1, insertData2), listOf(InsertRange(2, 3, listOf(insertData1, insertData2))))
+				UpdateListAction(listOf(entity1, entity2), listOf(InsertRange(0, 2, listOf(entity1, entity2)))),
+				UpdateListAction(listOf(entity1, entity2, insertData1, insertData2), listOf(InsertRange(2, 2, listOf(insertData1, insertData2))))
 		)
 		
 		checkIsTransformCorrect(input, expected)
@@ -52,7 +51,7 @@ class ListDifferTest {
 		
 		val expected = listOf<ListAction<TestEntity>>(
 				InitListAction(emptyList()),
-				UpdateListAction(listOf(entity1, entity2), listOf(InsertRange(0, 1, listOf(entity1, entity2)))),
+				UpdateListAction(listOf(entity1, entity2), listOf(InsertRange(0, 2, listOf(entity1, entity2)))),
 				UpdateListAction(listOf(entity1, entity2, insertData1), listOf(InsertEntity(2, insertData1)))
 		)
 		
@@ -69,7 +68,7 @@ class ListDifferTest {
 		
 		val expected = listOf<ListAction<TestEntity>>(
 				InitListAction(emptyList()),
-				UpdateListAction(listOf(entity1, entity2), listOf(InsertRange(0, 1, listOf(entity1, entity2)))),
+				UpdateListAction(listOf(entity1, entity2), listOf(InsertRange(0, 2, listOf(entity1, entity2)))),
 				UpdateListAction(listOf(entity1, update2), listOf(ChangeEntity(1, update2))),
 				UpdateListAction(listOf(update1, update2), listOf(ChangeEntity(0, update1)))
 		)
@@ -85,9 +84,10 @@ class ListDifferTest {
 		)
 		val expected = listOf<ListAction<TestEntity>>(
 				InitListAction(emptyList()),
-				UpdateListAction(listOf(entity1, entity2), listOf(InsertRange(0, 1, listOf(entity1, entity2)))),
-				UpdateListAction(listOf(update1, update2), listOf(ChangeEntity(0, update1), ChangeEntity(1, update2)))
+				UpdateListAction(listOf(entity1, entity2), listOf(InsertRange(0, 2, listOf(entity1, entity2)))),
+				UpdateListAction(listOf(update1, update2), listOf(ChangeRange(0, 2, listOf(update1, update2))))
 		)
+		
 		checkIsTransformCorrect(input, expected)
 	}
 	
@@ -99,7 +99,7 @@ class ListDifferTest {
 		)
 		val expected = listOf<ListAction<TestEntity>>(
 				InitListAction(emptyList()),
-				UpdateListAction(listOf(entity1, entity2, entity3), listOf(InsertRange(0, 2, listOf(entity1, entity2, entity3)))),
+				UpdateListAction(listOf(entity1, entity2, entity3), listOf(InsertRange(0, 3, listOf(entity1, entity2, entity3)))),
 				UpdateListAction(listOf(entity1, update2, entity3), listOf(ChangeEntity(1, update2)))
 		)
 		
@@ -115,7 +115,7 @@ class ListDifferTest {
 		
 		val expected = listOf<ListAction<TestEntity>>(
 				InitListAction(emptyList()),
-				UpdateListAction(listOf(entity1, entity2), listOf(InsertRange(0, 1, listOf(entity1, entity2)))),
+				UpdateListAction(listOf(entity1, entity2), listOf(InsertRange(0, 2, listOf(entity1, entity2)))),
 				UpdateListAction(listOf(entity2), listOf(RemoveEntity(0, entity1)))
 		)
 		
@@ -130,7 +130,7 @@ class ListDifferTest {
 		)
 		val expected = listOf<ListAction<TestEntity>>(
 				InitListAction(emptyList()),
-				UpdateListAction(listOf(entity1, entity2, entity3), listOf(InsertRange(0, 2, listOf(entity1, entity2, entity3)))),
+				UpdateListAction(listOf(entity1, entity2, entity3), listOf(InsertRange(0, 3, listOf(entity1, entity2, entity3)))),
 				UpdateListAction(listOf(entity1, entity3), listOf(RemoveEntity(1, entity2)))
 		)
 		
@@ -146,8 +146,8 @@ class ListDifferTest {
 		
 		val expected = listOf<ListAction<TestEntity>>(
 				InitListAction(emptyList()),
-				UpdateListAction(listOf(entity1, entity2, entity3), listOf(InsertRange(0, 2, listOf(entity1, entity2, entity3)))),
-				UpdateListAction(listOf(entity3), listOf(RemoveRange(0, 1, listOf(entity1, entity2))))
+				UpdateListAction(listOf(entity1, entity2, entity3), listOf(InsertRange(0, 3, listOf(entity1, entity2, entity3)))),
+				UpdateListAction(listOf(entity3), listOf(RemoveRange(0, 2, listOf(entity1, entity2))))
 		)
 		
 		checkIsTransformCorrect(input, expected)
@@ -162,8 +162,8 @@ class ListDifferTest {
 		
 		val expected = listOf<ListAction<TestEntity>>(
 				InitListAction(emptyList()),
-				UpdateListAction(listOf(entity1, entity2, entity3), listOf(InsertRange(0, 2, listOf(entity1, entity2, entity3)))),
-				UpdateListAction(listOf(), listOf(RemoveRange(0, 2, listOf(entity1, entity2, entity3))))
+				UpdateListAction(listOf(entity1, entity2, entity3), listOf(InsertRange(0, 3, listOf(entity1, entity2, entity3)))),
+				UpdateListAction(listOf(), listOf(RemoveRange(0, 3, listOf(entity1, entity2, entity3))))
 		)
 		
 		checkIsTransformCorrect(input, expected)
@@ -178,7 +178,7 @@ class ListDifferTest {
 		)
 		val expected = listOf<ListAction<TestEntity>>(
 				InitListAction(emptyList()),
-				UpdateListAction(listOf(entity1, entity2), listOf(InsertRange(0, 1, listOf(entity1, entity2)))),
+				UpdateListAction(listOf(entity1, entity2), listOf(InsertRange(0, 2, listOf(entity1, entity2)))),
 				UpdateListAction(listOf(entity1, entity2, insertData1), listOf(InsertEntity(2, insertData1))),
 				UpdateListAction(listOf(entity1, entity2, insertData1, insertData2), listOf(InsertEntity(3, insertData2)))
 		)
@@ -194,13 +194,14 @@ class ListDifferTest {
 		)
 		val expected = listOf<ListAction<TestEntity>>(
 				InitListAction(emptyList()),
-				UpdateListAction(listOf(entity1, entity2), listOf(InsertRange(0, 1, listOf(entity1, entity2)))),
-				UpdateListAction(listOf(entity2, entity1), listOf(MoveEntity(0, 1)))
+				UpdateListAction(listOf(entity1, entity2), listOf(InsertRange(0, 2, listOf(entity1, entity2)))),
+				UpdateListAction(listOf(entity2, entity1), listOf(MoveEntity(1, 0)))
 		)
 		
 		checkIsTransformCorrect(input, expected)
 	}
 	
+	@Ignore
 	@Test
 	fun `test insert and remove`() {
 		val input = listOf(
@@ -216,6 +217,7 @@ class ListDifferTest {
 		checkIsTransformCorrect(input, expected)
 	}
 	
+	@Ignore
 	@Test
 	fun `test remove and update`() {
 		val input = listOf(

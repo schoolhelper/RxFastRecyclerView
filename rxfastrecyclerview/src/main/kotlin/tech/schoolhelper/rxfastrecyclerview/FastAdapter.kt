@@ -7,7 +7,11 @@ import io.reactivex.disposables.CompositeDisposable
 
 abstract class FastAdapter<ENTITY : Any, ViewHolder : FastUpdateViewHolder<ENTITY>> : RecyclerView.Adapter<ViewHolder>() {
 	
-	private val controller = FastAdapterController<ENTITY>(::notifyDataSetChanged, ::notifyItemRemoved, ::notifyItemInserted, ::notifyItemMoved)
+	private val controller = FastAdapterController<ENTITY>(
+			::notifyDataSetChanged,
+			::notifyItemMoved,
+			::notifyItemRemoved, ::notifyItemRangeRemoved,
+			::notifyItemInserted, ::notifyItemRangeInserted)
 	
 	protected val items = controller.items
 	
@@ -16,7 +20,7 @@ abstract class FastAdapter<ENTITY : Any, ViewHolder : FastUpdateViewHolder<ENTIT
 	}
 	
 	override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-		holder.bind(items[position], controller.changeEntitiesPublisher)
+		holder.bind(items[position], controller.getChangeEntitiesPublisher())
 	}
 	
 	override fun getItemCount(): Int = items.size

@@ -22,6 +22,7 @@ before_install:
 # Run assemble and unit tests
 script:
 - ./gradlew clean testDebugUnitTest testDebugUnitTestCoverage
-- cp rxfastrecyclerview/build/reports/jacoco/testDebugUnitTestCoverage/testDebugUnitTestCoverage.xml testDebugUnitTestCoverage.xml
+- cp rxfastrecyclerview/build/reports/jacoco/testDebugUnitTestCoverage/testDebugUnitTestCoverage.xml cobertura.xml
+- ls
 after_success:
 - bash <(curl -s https://codecov.io/bash)

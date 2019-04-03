@@ -1,4 +1,5 @@
 language: android
+jdk: oraclejdk8
 android:
   components:
   - android-28
@@ -21,6 +22,6 @@ before_install:
 # Run assemble and unit tests
 script:
 - ./gradlew clean testDebugUnitTest testDebugUnitTestCoverage
-- mv rxfastrecyclerview/build/reports/jacoco/testDebugUnitTestCoverage/testDebugUnitTestCoverage.xml testDebugUnitTestCoverage.xml
+- cp rxfastrecyclerview/build/reports/jacoco/testDebugUnitTestCoverage/testDebugUnitTestCoverage.xml testDebugUnitTestCoverage.xml
 after_success:
 - bash <(curl -s https://codecov.io/bash)

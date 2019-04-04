@@ -6,8 +6,8 @@ import io.reactivex.ObservableTransformer
 
 sealed class UpdateEntityCommand<E : Any>
 /**
-	* InsertEntity command which say, you need to add a entity to your collection into some postion
-	* [position] - position for entity in new collection
+	* InsertEntity command which say, you need to add a entity to your collection into some position
+	* [position] - position of entity in new collection
 	* [entity] - item for insert
 	*/
 data class InsertEntity<E : Any>(val position: Int, val entity: E) : UpdateEntityCommand<E>()
@@ -17,7 +17,13 @@ data class InsertRange<E : Any>(val from: Int, val count: Int, val entities: Lis
 data class RemoveEntity<E : Any>(val position: Int, val entity: E) : UpdateEntityCommand<E>()
 data class RemoveRange<E : Any>(val from: Int, val count: Int, val entities: List<E>) : UpdateEntityCommand<E>()
 
+/**
+	* ChangeEntity command which say, you need to update a entity inside the collection on a position
+	* [position] - position of entity for update
+	* [entity] - a new entity
+	*/
 data class ChangeEntity<E : Any>(val position: Int, val entity: E) : UpdateEntityCommand<E>()
+
 data class ChangeRange<E : Any>(val from: Int, val count: Int, val entities: List<E>) : UpdateEntityCommand<E>()
 
 data class MoveEntity<E : Any>(val fromPosition: Int, val toPosition: Int) : UpdateEntityCommand<E>()

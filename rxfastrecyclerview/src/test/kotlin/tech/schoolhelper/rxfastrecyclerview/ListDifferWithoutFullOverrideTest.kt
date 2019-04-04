@@ -5,15 +5,11 @@ import io.reactivex.observers.TestObserver
 import org.junit.Ignore
 import org.junit.Test
 
-class ListDifferTest {
+class ListDifferWithoutFullOverrideTest {
 	
 	private val differ: ListDiffer<TestEntity> = object : ListDiffer<TestEntity>() {
 		override fun areItemTheSame(old: TestEntity, new: TestEntity): Boolean {
 			return old.id == new.id
-		}
-		
-		override fun areContentTheSame(old: TestEntity, new: TestEntity): Boolean {
-			return old.content == new.content
 		}
 	}
 	

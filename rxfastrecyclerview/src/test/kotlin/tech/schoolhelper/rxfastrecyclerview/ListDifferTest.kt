@@ -2,7 +2,6 @@ package tech.schoolhelper.rxfastrecyclerview
 
 import io.reactivex.Observable
 import io.reactivex.observers.TestObserver
-import org.junit.Ignore
 import org.junit.Test
 
 class ListDifferTest {
@@ -201,7 +200,6 @@ class ListDifferTest {
 		checkIsTransformCorrect(input, expected)
 	}
 	
-	@Ignore
 	@Test
 	fun `test insert and remove`() {
 		val input = listOf(
@@ -217,7 +215,6 @@ class ListDifferTest {
 		checkIsTransformCorrect(input, expected)
 	}
 	
-	@Ignore
 	@Test
 	fun `test remove and update`() {
 		val input = listOf(

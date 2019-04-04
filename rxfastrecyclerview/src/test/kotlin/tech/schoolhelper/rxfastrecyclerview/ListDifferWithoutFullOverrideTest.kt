@@ -2,17 +2,14 @@ package tech.schoolhelper.rxfastrecyclerview
 
 import io.reactivex.Observable
 import io.reactivex.observers.TestObserver
+import org.junit.Ignore
 import org.junit.Test
 
-class ListDifferTest {
+class ListDifferWithoutFullOverrideTest {
 	
 	private val differ: ListDiffer<TestEntity> = object : ListDiffer<TestEntity>() {
 		override fun areItemTheSame(old: TestEntity, new: TestEntity): Boolean {
 			return old.id == new.id
-		}
-		
-		override fun areContentTheSame(old: TestEntity, new: TestEntity): Boolean {
-			return old.content == new.content
 		}
 	}
 	
@@ -200,6 +197,7 @@ class ListDifferTest {
 		checkIsTransformCorrect(input, expected)
 	}
 	
+	@Ignore
 	@Test
 	fun `test insert and remove`() {
 		val input = listOf(
@@ -215,6 +213,7 @@ class ListDifferTest {
 		checkIsTransformCorrect(input, expected)
 	}
 	
+	@Ignore
 	@Test
 	fun `test remove and update`() {
 		val input = listOf(

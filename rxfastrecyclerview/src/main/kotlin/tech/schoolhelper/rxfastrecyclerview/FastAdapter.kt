@@ -1,9 +1,6 @@
 package tech.schoolhelper.rxfastrecyclerview
 
-import android.view.View
 import androidx.recyclerview.widget.RecyclerView
-import io.reactivex.Observable
-import io.reactivex.disposables.CompositeDisposable
 
 abstract class FastAdapter<ENTITY : Any, ViewHolder : FastUpdateViewHolder<ENTITY>> : RecyclerView.Adapter<ViewHolder>() {
 	
@@ -29,29 +26,4 @@ abstract class FastAdapter<ENTITY : Any, ViewHolder : FastUpdateViewHolder<ENTIT
 		super.onViewRecycled(holder)
 		holder.onRecycle()
 	}
-}
-
-abstract class FastUpdateViewHolder<ENTITY : Any>(itemView: View) : RecyclerView.ViewHolder(itemView) {
-	
-	protected val compositeDisposable = CompositeDisposable()
-	
-	abstract fun initEntity(entity: ENTITY)
-	
-	abstract fun setupListeners(entity: ENTITY)
-	
-	fun bind(entity: ENTITY, changeEntitySubject: Observable<ChangeEntity<ENTITY>>) {
-		onRecycle()
-		initEntity(entity)
-		setupListeners(entity)
-		
-		compositeDisposable.add(changeEntitySubject
-				.filter { it.position == adapterPosition }
-				.map { it.entity }
-				.subscribe(this::initEntity, {}))
-	}
-	
-	fun onRecycle() {
-		this.compositeDisposable.clear()
-	}
-	
 }

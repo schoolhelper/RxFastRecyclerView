@@ -2,26 +2,28 @@ language: android
 jdk: oraclejdk8
 android:
   components:
-  - android-28
-  - build-tools-27.0.3
+    - android-28
+    - build-tools-27.0.3
 addons:
   ssh_known_hosts: 167.99.94.185
   apt:
     packages:
-    - sshpass
+      - sshpass
 
 env:
   global:
-  # install timeout in minutes (2 minutes by default)
-  - ADB_INSTALL_TIMEOUT=8
+    # install timeout in minutes (2 minutes by default)
+    - ADB_INSTALL_TIMEOUT=8
 
 before_install:
-- yes | sdkmanager "platforms;android-27"
-- chmod +x gradlew
+  - yes | sdkmanager "platforms;android-27"
+  - chmod +x gradlew
 
 # Run assemble and unit tests
 script:
-- ./gradlew clean testDebugUnitTest testDebugUnitTestCoverage
-- cp rxfastrecyclerview/build/reports/jacoco/testDebugUnitTestCoverage/testDebugUnitTestCoverage.xml cobertura.xml
+  - ./gradlew clean testDebugUnitTest testDebugUnitTestCoverage
+  - cp rxfastrecyclerview/build/reports/jacoco/testDebugUnitTestCoverage/testDebugUnitTestCoverage.xml cobertura.xml
 after_success:
-- bash <(curl -s https://codecov.io/bash)
+  - bash <(curl -s https://codecov.io/bash)
+after_script:
+  - python <(curl -s https://report.ci/upload.py)

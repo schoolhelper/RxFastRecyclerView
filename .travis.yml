@@ -44,5 +44,13 @@ script:
   - cp rxfastrecyclerview/build/reports/jacoco/testDebugUnitTestCoverage/testDebugUnitTestCoverage.xml cobertura.xml
 after_success:
   - bash <(curl -s https://codecov.io/bash)
+
+# Annotate only on failure
+after_failure:
+  - curl -s https://report.ci/annotate.py | python - --tool gcc --input build.log
+
 after_script:
-  - python < $(curl https://report.ci/upload.py)
+  # Framework with autodetection
+  - python < $(curl -s https://report.ci/upload.py)
+  # Explicit framework
+  - curl -s https://report.ci/upload.py | python - --framework=boost

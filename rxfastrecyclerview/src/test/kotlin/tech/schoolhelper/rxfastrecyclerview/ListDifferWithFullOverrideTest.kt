@@ -216,8 +216,7 @@ class ListDifferWithFullOverrideTest {
 		
 		checkIsTransformCorrect(input, expected)
 	}
-	
-	@Ignore
+
 	@Test
 	fun `test remove and update`() {
 		val input = listOf(

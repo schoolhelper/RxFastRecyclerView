@@ -40,17 +40,13 @@ before_script:
 
 # Run assemble and unit tests
 script:
-  - ./gradlew clean testDebugUnitTest testDebugUnitTestCoverage || true
+  - ./gradlew clean testDebugUnitTest testDebugUnitTestCoverage
 after_success:
   - bash <(curl -s https://codecov.io/bash)
 
 # Annotate only on failure
 after_failure:
-  - curl -s https://report.ci/annotate.py | python - --tool gcc --input build.log
+  - curl -s https://report.ci/upload.py | python - --include='*.xml' --framework=junit
 
 after_script:
   - cp rxfastrecyclerview/build/reports/jacoco/testDebugUnitTestCoverage/testDebugUnitTestCoverage.xml cobertura.xml
-  # Framework with autodetection
-  - python < $(curl -s https://report.ci/upload.py)
-  # Explicit framework
-  - curl -s https://report.ci/upload.py | python - --framework=boost

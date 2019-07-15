@@ -36,12 +36,14 @@ cache:
     - $HOME/.android/build-cache
 
 before_script:
+  - curl -s https://raw.githubusercontent.com/report-ci/scripts/master/annotate.py > annotate.py
   - chmod +x gradlew
 
 # Run assemble and unit tests
 script:
   - ./gradlew clean testDebugUnitTest testDebugUnitTestCoverage
 after_success:
+  - cp rxfastrecyclerview/build/reports/jacoco/testDebugUnitTestCoverage/testDebugUnitTestCoverage.xml cobertura.xml
   - bash <(curl -s https://codecov.io/bash)
 
 # Annotate only on failure
@@ -49,4 +51,4 @@ after_failure:
   - curl -s https://report.ci/upload.py | python - --include='*.xml' --framework=junit
 
 after_script:
-  - cp rxfastrecyclerview/build/reports/jacoco/testDebugUnitTestCoverage/testDebugUnitTestCoverage.xml cobertura.xml
+  - python <(curl -s https://raw.githubusercontent.com/report-ci/scripts/master/upload.py)

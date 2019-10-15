@@ -46,10 +46,10 @@ dependencies {
     testImplementation "io.mockk:mockk:$mockKVersion"
     testImplementation "io.mockk:mockk-android:$mockKVersion"
 
-    testImplementation 'io.kotlintest:kotlintest-runner-junit5:3.3.2'
+    testImplementation 'io.kotlintest:kotlintest-runner-junit5:3.4.2'
 
     testImplementation "androidx.recyclerview:recyclerview:1.0.0"
-    testImplementation "io.reactivex.rxjava2:rxjava:2.2.8"
+    testImplementation "io.reactivex.rxjava2:rxjava:2.2.13"
 }
 
 repositories {

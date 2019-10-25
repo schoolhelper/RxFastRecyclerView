@@ -201,7 +201,6 @@ class ListDifferWithFullOverrideTest {
 		checkIsTransformCorrect(input, expected)
 	}
 	
-	@Ignore
 	@Test
 	fun `test insert and remove`() {
 		val input = listOf(
@@ -210,13 +209,13 @@ class ListDifferWithFullOverrideTest {
 		)
 		val expected = listOf<ListAction<TestEntity>>(
 				InitListAction(emptyList()),
-				UpdateListAction(listOf(entity1, entity2), listOf(InsertRange(0, 1, listOf(entity1, entity2)))),
+				UpdateListAction(listOf(entity1, entity2), listOf(InsertRange(0, 2, listOf(entity1, entity2)))),
 				UpdateListAction(listOf(entity1, entity3), listOf(RemoveEntity(1, entity2), InsertEntity(1, entity3)))
 		)
 		
 		checkIsTransformCorrect(input, expected)
 	}
-	
+
 	@Ignore
 	@Test
 	fun `test remove and update`() {
@@ -226,7 +225,7 @@ class ListDifferWithFullOverrideTest {
 		)
 		val expected = listOf<ListAction<TestEntity>>(
 				InitListAction(emptyList()),
-				UpdateListAction(listOf(entity1, entity2, entity3), listOf(InsertRange(0, 2, listOf(entity1, entity2, entity3)))),
+				UpdateListAction(listOf(entity1, entity2, entity3), listOf(InsertRange(0, 3, listOf(entity1, entity2, entity3)))),
 				UpdateListAction(listOf(entity1, update3), listOf(RemoveEntity(1, entity2), ChangeEntity(1, update3)))
 		)
 		

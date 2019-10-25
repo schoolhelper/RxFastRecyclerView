@@ -6,13 +6,26 @@ import io.reactivex.ObservableTransformer
 
 sealed class UpdateEntityCommand<E : Any>
 /**
-	* InsertEntity command which say, you need to add a entity to your collection into some postion
-	* [position] - position for entity in new collection
+	* InsertEntity command which say, you need to add a entity to your collection into some position
+	* [position] - position of entity in new collection
 	* [entity] - item for insert
 	*/
 data class InsertEntity<E : Any>(val position: Int, val entity: E) : UpdateEntityCommand<E>()
+
+data class InsertRange<E : Any>(val from: Int, val count: Int, val entities: List<E>) : UpdateEntityCommand<E>()
+
 data class RemoveEntity<E : Any>(val position: Int, val entity: E) : UpdateEntityCommand<E>()
+data class RemoveRange<E : Any>(val from: Int, val count: Int, val entities: List<E>) : UpdateEntityCommand<E>()
+
+/**
+	* ChangeEntity command which say, you need to update a entity inside the collection on a position
+	* [position] - position of entity for update
+	* [entity] - a new entity
+	*/
 data class ChangeEntity<E : Any>(val position: Int, val entity: E) : UpdateEntityCommand<E>()
+
+data class ChangeRange<E : Any>(val from: Int, val count: Int, val entities: List<E>) : UpdateEntityCommand<E>()
+
 data class MoveEntity<E : Any>(val fromPosition: Int, val toPosition: Int) : UpdateEntityCommand<E>()
 
 sealed class ListAction<E : Any>(open val data: List<E>)
@@ -53,10 +66,14 @@ abstract class ListDiffer<E : Any> {
 			observable.scan(InitListAction(emptyList())) { old: ListAction<E>, newList: List<E> ->
 				val updateActions = mutableListOf<UpdateEntityCommand<E>>()
 				
-				DiffUtil.calculateDiff(DiffCallback(old.data, newList, ::areItemTheSame, ::areContentTheSame), false)
+				DiffUtil.calculateDiff(DiffCallback(old.data, newList, ::areItemTheSame, ::areContentTheSame), true)
 						.dispatchUpdatesTo(object : ListUpdateCallback {
 							override fun onChanged(position: Int, count: Int, payload: Any?) {
-								updateActions.addAll((position until (position + count)).map { ChangeEntity(it, newList[it]) })
+								if (count == 1) {
+									updateActions.add(ChangeEntity(position, newList[position]))
+								} else {
+									updateActions.add(ChangeRange(position, count, newList.subList(position, position + count)))
+								}
 							}
 							
 							override fun onMoved(fromPosition: Int, toPosition: Int) {
@@ -64,11 +81,19 @@ abstract class ListDiffer<E : Any> {
 							}
 							
 							override fun onInserted(position: Int, count: Int) {
-								updateActions.addAll((position until (position + count)).map { InsertEntity(it, newList[it]) })
+								if (count == 1) {
+									updateActions.add(InsertEntity(position, newList[position]))
+								} else {
+									updateActions.add(InsertRange(position, count, newList.subList(position, position + count)))
+								}
 							}
 							
 							override fun onRemoved(position: Int, count: Int) {
-								updateActions.addAll((position until (position + count)).map { RemoveEntity(it, old.data[it]) })
+								if (count == 1) {
+									updateActions.add(RemoveEntity(position, old.data[position]))
+								} else {
+									updateActions.add(RemoveRange(position, count, old.data.subList(position, position + count)))
+								}
 							}
 						})
 				return@scan UpdateListAction(newList, updateActions)

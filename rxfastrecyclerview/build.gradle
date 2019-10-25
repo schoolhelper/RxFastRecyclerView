@@ -5,7 +5,7 @@ android {
     compileSdkVersion 28
 
     defaultConfig {
-        minSdkVersion 21
+        minSdkVersion 16
         targetSdkVersion 28
         versionCode 1
         versionName "0.1"
@@ -46,17 +46,15 @@ dependencies {
     testImplementation "io.mockk:mockk:$mockKVersion"
     testImplementation "io.mockk:mockk-android:$mockKVersion"
 
-    /*def jupiterVersion = "5.3.2"
-    testImplementation "org.junit.jupiter:junit-jupiter-api:$jupiterVersion"
-    testImplementation "org.junit.jupiter:junit-jupiter-params:$jupiterVersion"
-    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$jupiterVersion"*/
-
-    testImplementation 'io.kotlintest:kotlintest-runner-junit5:3.3.1'
+    testImplementation 'io.kotlintest:kotlintest-runner-junit5:3.4.2'
 
     testImplementation "androidx.recyclerview:recyclerview:1.0.0"
-    testImplementation "io.reactivex.rxjava2:rxjava:2.2.7"
+    testImplementation "io.reactivex.rxjava2:rxjava:2.2.13"
 }
 
 repositories {
     mavenCentral()
 }
+
+apply from: 'https://gist.githubusercontent.com/mrsasha/384a19f97cdeba5b5c2ea55f930fccd4/raw/bb3ce24b06ed6ae102597e4b948b9abd2af8392c/jacoco.gradle'
+

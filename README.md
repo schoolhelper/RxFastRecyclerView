@@ -3,12 +3,16 @@ The library provides a base adapter for recycler view and ObservableTransform fo
 
 [![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=schoolhelper/RxFastRecyclerView)](https://dependabot.com)
 
+[![](https://jitpack.io/v/schoolhelper/RxFastRecyclerView.svg)](https://jitpack.io/#schoolhelper/RxFastRecyclerView)
+
 ## Status
 ### Dev branch
 [![Build Status](https://travis-ci.org/schoolhelper/androidgraphextension.svg?branch=dev)](https://travis-ci.org/schoolhelper/androidgraphextension)
+[![codecov](https://codecov.io/gh/schoolhelper/RxFastRecyclerView/branch/dev/graph/badge.svg)](https://codecov.io/gh/schoolhelper/RxFastRecyclerView)
 
 ### Master brach
 [![Build Status](https://travis-ci.org/schoolhelper/androidgraphextension.svg?branch=master)](https://travis-ci.org/schoolhelper/androidgraphextension)
+[![codecov](https://codecov.io/gh/schoolhelper/RxFastRecyclerView/branch/master/graph/badge.svg)](https://codecov.io/gh/schoolhelper/RxFastRecyclerView)
 
 ## We are faster
 We don't recreate view holder for update data.

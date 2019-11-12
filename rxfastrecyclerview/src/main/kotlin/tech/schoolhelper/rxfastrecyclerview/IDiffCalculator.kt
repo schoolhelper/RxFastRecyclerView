@@ -36,7 +36,9 @@ class DefaultDiffCalculator<E : Any> : IDiffCalculator<E> {
                     payload: Any?
                 ) {
                     if (count == 1) {
-                        updateActions.add(ChangeEntity(position, new[position]))
+                        if (position < new.size && position >= 0) {
+                            updateActions.add(ChangeEntity(position, new[position]))
+                        }
                     } else {
                         updateActions.add(
                             ChangeRange(

@@ -44,7 +44,10 @@ class DefaultDiffCalculator<E : Any> : IDiffCalculator<E> {
                             ChangeRange(
                                 position,
                                 count,
-                                new.subList(position, position + count)
+                                new.subList(
+                                    position,
+                                    (position + count).coerceAtMost(new.lastIndex)
+                                )
                             )
                         )
                     }
@@ -68,7 +71,10 @@ class DefaultDiffCalculator<E : Any> : IDiffCalculator<E> {
                             InsertRange(
                                 position,
                                 count,
-                                new.subList(position, position + count)
+                                new.subList(
+                                    position,
+                                    (position + count).coerceAtMost(new.lastIndex)
+                                )
                             )
                         )
                     }

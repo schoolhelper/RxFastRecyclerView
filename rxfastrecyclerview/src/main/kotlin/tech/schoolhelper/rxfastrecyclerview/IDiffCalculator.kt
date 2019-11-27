@@ -73,7 +73,7 @@ class DefaultDiffCalculator<E : Any> : IDiffCalculator<E> {
                                 count,
                                 new.subList(
                                     position,
-                                    (position + count).coerceAtMost(new.lastIndex)
+                                    (position + count).coerceAtMost(new.size)
                                 )
                             )
                         )

@@ -4,8 +4,8 @@ import io.kotlintest.shouldBe
 import io.mockk.mockk
 import io.mockk.verify
 import io.reactivex.observers.TestObserver
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 
 class FastAdapterControllerTest {
 	
@@ -18,7 +18,7 @@ class FastAdapterControllerTest {
 	
 	private lateinit var controller: FastAdapterController<TestEntity>
 	
-	@Before
+	@BeforeEach
 	fun setUp() {
 		controller = FastAdapterController(notifyDataSetChanged, notifyItemMoved, notifyItemRemoved, notifyItemRemovedRange, notifyItemInserted, notifyItemInsertedRange)
 	}

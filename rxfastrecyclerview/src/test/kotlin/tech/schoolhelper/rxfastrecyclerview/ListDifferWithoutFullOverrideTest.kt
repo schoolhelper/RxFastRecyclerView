@@ -3,7 +3,7 @@ package tech.schoolhelper.rxfastrecyclerview
 import io.reactivex.Observable
 import io.reactivex.observers.TestObserver
 import org.junit.Ignore
-import org.junit.Test
+import org.junit.jupiter.api.Test
 
 class ListDifferWithoutFullOverrideTest {
 	

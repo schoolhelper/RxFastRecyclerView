@@ -35,6 +35,9 @@ class DefaultDiffCalculator<E : Any> : IDiffCalculator<E> {
                     count: Int,
                     payload: Any?
                 ) {
+                    if (count <= 0) {
+                        return
+                    }
                     if (count == 1) {
                         if (position < new.size && position >= 0) {
                             updateActions.add(ChangeEntity(position, new[position]))
@@ -64,6 +67,9 @@ class DefaultDiffCalculator<E : Any> : IDiffCalculator<E> {
                     position: Int,
                     count: Int
                 ) {
+                    if (count <= 0) {
+                        return
+                    }
                     if (count == 1) {
                         updateActions.add(InsertEntity(position, new[position]))
                     } else {
@@ -84,6 +90,9 @@ class DefaultDiffCalculator<E : Any> : IDiffCalculator<E> {
                     position: Int,
                     count: Int
                 ) {
+                    if (count <= 0) {
+                        return
+                    }
                     if (count == 1) {
                         updateActions.add(RemoveEntity(position, old[position]))
                     } else {

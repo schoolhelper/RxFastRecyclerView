@@ -2,13 +2,13 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 29
 
     defaultConfig {
         minSdkVersion 16
-        targetSdkVersion 28
+        targetSdkVersion 29
         versionCode 1
-        versionName "0.1"
+        versionName "0.2"
     }
 
     lintOptions {
@@ -28,6 +28,12 @@ android {
         }
         test {
             java.srcDirs += "src/test/kotlin"
+        }
+    }
+
+    testOptions {
+        unitTests.all {
+            useJUnitPlatform()
         }
     }
 }

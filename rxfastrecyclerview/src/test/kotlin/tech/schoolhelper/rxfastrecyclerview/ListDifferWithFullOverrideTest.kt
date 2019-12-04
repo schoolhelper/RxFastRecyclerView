@@ -1,8 +1,8 @@
 package tech.schoolhelper.rxfastrecyclerview
 
+import io.kotlintest.specs.AbstractAnnotationSpec
 import io.reactivex.Observable
 import io.reactivex.observers.TestObserver
-import org.junit.Ignore
 import org.junit.jupiter.api.Test
 
 class ListDifferWithFullOverrideTest {
@@ -216,7 +216,36 @@ class ListDifferWithFullOverrideTest {
 		checkIsTransformCorrect(input, expected)
 	}
 
-	@Ignore
+	@Test
+	fun `simple update`() {
+		val input = listOf(
+			listOf(entity1, entity2, entity3),
+			listOf(entity1, entity2, update3)
+		)
+		val expected = listOf<ListAction<TestEntity>>(
+			InitListAction(emptyList()),
+			UpdateListAction(listOf(entity1, entity2, entity3), listOf(InsertRange(0, 3, listOf(entity1, entity2, entity3)))),
+			UpdateListAction(listOf(entity1, entity2, update3), listOf(ChangeEntity(2, update3)))
+		)
+
+		checkIsTransformCorrect(input, expected)
+	}
+
+	@Test
+	fun `simple remove`() {
+		val input = listOf(
+			listOf(entity1, entity2, entity3),
+			listOf(entity1, entity3)
+		)
+		val expected = listOf<ListAction<TestEntity>>(
+			InitListAction(emptyList()),
+			UpdateListAction(listOf(entity1, entity2, entity3), listOf(InsertRange(0, 3, listOf(entity1, entity2, entity3)))),
+			UpdateListAction(listOf(entity1, entity3), listOf(RemoveEntity(1, entity2)))
+		)
+
+		checkIsTransformCorrect(input, expected)
+	}
+
 	@Test
 	fun `test remove and update`() {
 		val input = listOf(

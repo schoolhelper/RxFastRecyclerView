@@ -46,13 +46,17 @@ dependencies {
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
-    testImplementation 'junit:junit:4.12'
+    def junitVersion = '5.3.2'
+    testImplementation "org.junit.jupiter:junit-jupiter-api:$junitVersion"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junitVersion"
+    testImplementation "org.junit.jupiter:junit-jupiter-params:$junitVersion"
 
-    def mockKVersion = "1.9.3"
-    testImplementation "io.mockk:mockk:$mockKVersion"
-    testImplementation "io.mockk:mockk-android:$mockKVersion"
+    //testImplementation "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
+    testImplementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
-    testImplementation 'io.kotlintest:kotlintest-runner-junit5:3.4.2'
+    testImplementation 'io.kotlintest:kotlintest-runner-junit5:3.3.2'
+
+    testImplementation "io.mockk:mockk:1.9.3"
 
     testImplementation "androidx.recyclerview:recyclerview:1.1.0"
     testImplementation "io.reactivex.rxjava2:rxjava:2.2.15"

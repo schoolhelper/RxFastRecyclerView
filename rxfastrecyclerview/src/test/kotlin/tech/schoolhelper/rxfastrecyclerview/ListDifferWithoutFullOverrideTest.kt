@@ -1,8 +1,8 @@
 package tech.schoolhelper.rxfastrecyclerview
 
+import io.kotlintest.specs.AbstractAnnotationSpec
 import io.reactivex.Observable
 import io.reactivex.observers.TestObserver
-import org.junit.Ignore
 import org.junit.jupiter.api.Test
 
 class ListDifferWithoutFullOverrideTest {
@@ -197,7 +197,7 @@ class ListDifferWithoutFullOverrideTest {
 		checkIsTransformCorrect(input, expected)
 	}
 	
-	@Ignore
+	@AbstractAnnotationSpec.Ignore
 	@Test
 	fun `test insert and remove`() {
 		val input = listOf(
@@ -213,7 +213,7 @@ class ListDifferWithoutFullOverrideTest {
 		checkIsTransformCorrect(input, expected)
 	}
 	
-	@Ignore
+	@AbstractAnnotationSpec.Ignore
 	@Test
 	fun `test remove and update`() {
 		val input = listOf(

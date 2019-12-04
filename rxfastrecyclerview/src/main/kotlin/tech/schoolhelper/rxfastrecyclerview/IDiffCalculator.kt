@@ -48,7 +48,7 @@ class DefaultDiffCalculator<E : Any> : IDiffCalculator<E> {
                                 position,
                                 count,
                                 new.subList(
-                                    position,
+                                    position.coerceAtMost(new.size),
                                     (position + count).coerceAtMost(new.size)
                                 )
                             )
@@ -78,7 +78,7 @@ class DefaultDiffCalculator<E : Any> : IDiffCalculator<E> {
                                 position,
                                 count,
                                 new.subList(
-                                    position,
+                                    position.coerceAtMost(new.size),
                                     (position + count).coerceAtMost(new.size)
                                 )
                             )
@@ -100,7 +100,10 @@ class DefaultDiffCalculator<E : Any> : IDiffCalculator<E> {
                             RemoveRange(
                                 position,
                                 count,
-                                old.subList(position, position + count)
+                                old.subList(
+                                    position.coerceAtMost(new.size),
+                                    (position + count).coerceAtMost(new.size)
+                                )
                             )
                         )
                     }

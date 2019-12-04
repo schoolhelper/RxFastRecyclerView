@@ -75,8 +75,7 @@ abstract class ListDiffer<E : Any>(private val diffCalculator: IDiffCalculator<E
     fun transformToDiff(): ObservableTransformer<List<E>, ListAction<E>> {
         return ObservableTransformer { observable ->
             observable.scan(InitListAction(emptyList())) { old: ListAction<E>, newList: List<E> ->
-                val data = old.data
-                return@scan calculateDiff(data, newList)
+                return@scan calculateDiff(old.data, newList)
             }
         }
     }

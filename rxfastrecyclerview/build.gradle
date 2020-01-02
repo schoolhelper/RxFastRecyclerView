@@ -40,7 +40,7 @@ dependencies {
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
-    testImplementation 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.13'
 
     def mockKVersion = "1.9.3"
     testImplementation "io.mockk:mockk:$mockKVersion"

@@ -74,7 +74,9 @@ class DefaultDiffCalculator<E : Any> : IDiffCalculator<E> {
                         return
                     }
                     if (count == 1) {
-                        updateActions.add(InsertEntity(position, new[position]))
+                        if (position < new.size && position >= 0) {
+                            updateActions.add(InsertEntity(position, new[position]))
+                        }
                     } else {
                         updateActions.add(
                             InsertRange(

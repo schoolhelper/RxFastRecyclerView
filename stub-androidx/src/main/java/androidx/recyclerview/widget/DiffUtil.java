@@ -20,5 +20,9 @@ public class DiffUtil {
         public abstract boolean areItemsTheSame(int oldItemPosition, int newItemPosition);
 
         public abstract boolean areContentsTheSame(int oldItemPosition, int newItemPosition);
+
+        public Object getChangePayload(int oldItemPosition, int newItemPosition) {
+            throw new RuntimeException("Stub!");
+        }
     }
 }

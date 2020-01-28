@@ -43,7 +43,8 @@ class DiffCallback<E : Any>(
     private val oldList: List<E>,
     private val newList: List<E>,
     private val areItemTheSame: (E, E) -> Boolean,
-    private val areContentTheSame: (E, E) -> Boolean
+    private val areContentTheSame: (E, E) -> Boolean,
+    private val getChangePayload: (E, E) -> Any? = { _, _ -> null }
 ) : DiffUtil.Callback() {
 
     override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
@@ -57,6 +58,10 @@ class DiffCallback<E : Any>(
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
         return areContentTheSame(oldList[oldItemPosition], newList[newItemPosition])
     }
+
+    override fun getChangePayload(oldItemPosition: Int, newItemPosition: Int): Any? {
+        return getChangePayload(oldList[oldItemPosition], newList[newItemPosition])
+    }
 }
 
 abstract class ListDiffer<E : Any>(private val diffCalculator: IDiffCalculator<E> = DefaultDiffCalculator()) {
@@ -67,9 +72,19 @@ abstract class ListDiffer<E : Any>(private val diffCalculator: IDiffCalculator<E
         return old == new
     }
 
+    open fun getChangePayload(old: E, new: E): Any? {
+        return null
+    }
+
     @Suppress("MemberVisibilityCanBePrivate")
     fun calculateDiff(old: List<E>, new: List<E>): UpdateListAction<E> {
-        return diffCalculator.calculateDiff(old, new, ::areItemTheSame, ::areContentTheSame)
+        return diffCalculator.calculateDiff(
+            old,
+            new,
+            ::areItemTheSame,
+            ::areContentTheSame,
+            this::getChangePayload
+        )
     }
 
     fun transformToDiff(): ObservableTransformer<List<E>, ListAction<E>> {

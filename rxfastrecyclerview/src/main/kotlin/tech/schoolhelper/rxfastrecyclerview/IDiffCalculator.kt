@@ -9,7 +9,7 @@ interface IDiffCalculator<E : Any> {
         new: List<E>,
         areItemTheSame: (E, E) -> Boolean,
         areContentTheSame: (E, E) -> Boolean,
-        getPayload: (E, E) -> Any?
+        getChangePayload: (E, E) -> Any? = { _, _ -> null }
     ): UpdateListAction<E>
 }
 
@@ -19,7 +19,7 @@ class DefaultDiffCalculator<E : Any> : IDiffCalculator<E> {
         new: List<E>,
         areItemTheSame: (E, E) -> Boolean,
         areContentTheSame: (E, E) -> Boolean,
-        getPayload: (E, E) -> Any?
+        getChangePayload: (E, E) -> Any?
     ): UpdateListAction<E> {
         val updateActions = mutableListOf<UpdateEntityCommand<E>>()
 
@@ -29,7 +29,7 @@ class DefaultDiffCalculator<E : Any> : IDiffCalculator<E> {
                 new,
                 areItemTheSame,
                 areContentTheSame,
-                getPayload
+                getChangePayload
             ), true
         )
             .dispatchUpdatesTo(object : ListUpdateCallback {

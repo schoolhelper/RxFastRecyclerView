@@ -1,3 +1,5 @@
+# Project archive, because it does not have any sense. Use default way for work with recycler view and diff utils.
+
 # RxFastRecyclerView
 The library provides a base adapter for recycler view and ObservableTransform for transform data for the adapter. The library update data into recycler view faster when default android way.
 
